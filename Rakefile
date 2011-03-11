@@ -19,7 +19,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{This plugin provides an enhanced acts_as_nested_set mixin for ActiveRecord, the object-relational mapping layer of the framework Ruby on Rails. The original nested set in Rails lacks many important features, such as moving branches within a tree.}
   gem.email = "dirk.breuer@gmail.com"
   gem.authors = ["Chris Bailey", "Jean-Christophe Michel", "Dirk Breuer"]
-  gem.files += FileList['lib/**/*.rb', 'app/**/*.rb'].to_a
+  gem.files = FileList['lib/**/*.rb', 'app/**/*.rb'].to_a
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  gem.add_runtime_dependency 'jabber4r', '> 0.1'

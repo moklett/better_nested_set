@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{better_nested_set}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chris Bailey", "Jean-Christophe Michel", "Dirk Breuer"]
@@ -17,20 +17,9 @@ Gem::Specification.new do |s|
     "README.rdoc"
   ]
   s.files = [
-    "VERSION",
     "app/helpers/better_nested_set_helper.rb",
     "lib/better_nested_set.rb",
-    "lib/symetrie_com/acts_as_better_nested_set.rb",
-    "test/RUNNING_UNIT_TESTS",
-    "test/abstract_unit.rb",
-    "test/acts_as_nested_set_test.rb",
-    "test/database.yml",
-    "test/fixtures/mixin.rb",
-    "test/fixtures/mixins.yml",
-    "test/mysql.rb",
-    "test/postgresql.rb",
-    "test/schema.rb",
-    "test/sqlite3.rb"
+    "lib/symetrie_com/acts_as_better_nested_set.rb"
   ]
   s.homepage = %q{http://github.com/railsbros-dirk/better_nested_set}
   s.licenses = ["MIT"]
