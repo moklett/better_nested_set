@@ -166,7 +166,7 @@ module SymetrieCom
             siblings = options[:nested] ? result_set.select { |s| s.parent_id == parent_id } : result_set
             siblings.each do |sibling|
               result_set.delete(sibling)
-              node = block_given? ? block.call(sibling, level) : sibling.attributes(:only => options[:only], :except => options[:except]) 
+              node = block_given? ? block.call(sibling, level) : filtered_attributes(sibling, options)
               options[:methods].inject(node) { |enum, m| enum[m.to_s] = sibling.send(m) if sibling.respond_to?(m); enum }          
               if options[:nested]              
                 opts = options.merge(:parent_id => sibling.id, :level => level + 1, :inner_recursion => true)
@@ -177,7 +177,7 @@ module SymetrieCom
             end
             unless inner_recursion
               result_set.each do |orphan| 
-                node = (block_given? ? block.call(orphan, level) : orphan.attributes(:only => options[:only], :except => options[:except])) 
+                node = (block_given? ? block.call(orphan, level) : filtered_attributes(orphan, options))
                 options[:methods].inject(node) { |enum, m| enum[m.to_s] = orphan.send(m) if orphan.respond_to?(m); enum }
                 array << (options[:symbolize_keys] && node.respond_to?(:symbolize_keys) ? node.symbolize_keys : node)
               end
@@ -268,7 +268,7 @@ module SymetrieCom
               result_set.delete(sibling)
               node_tag = (options[:record] || sibling[sibling.class.inheritance_column] || 'node').underscore
               node_tag = node_tag.dasherize unless options[:dasherize]
-              attrs = block_given? ? block.call(sibling, level) : sibling.attributes(:only => options[:only], :except => options[:except])
+              attrs = block_given? ? block.call(sibling, level) : filtered_attributes(sibling, options)
               options[:methods].inject(attrs) { |enum, m| enum[m.to_s] = sibling.send(m) if sibling.respond_to?(m); enum }
               if options[:nested] && sibling.children?
                 opts = options.merge(:parent_id => sibling.id, :level => level + 1, :inner_recursion => true, :skip_instruct => true)              
@@ -281,7 +281,7 @@ module SymetrieCom
               result_set.each do |orphan|
                 node_tag = (options[:record] || orphan[orphan.class.inheritance_column] || 'node').underscore
                 node_tag = node_tag.dasherize unless options[:dasherize]  
-                attrs = block_given? ? block.call(orphan, level) : orphan.attributes(:only => options[:only], :except => options[:except])
+                attrs = block_given? ? block.call(orphan, level) : filtered_attributes(orphan, options)
                 options[:methods].inject(attrs) { |enum, m| enum[m.to_s] = orphan.send(m) if orphan.respond_to?(m); enum }
                 options[:builder].tag!(node_tag, attrs)
               end
@@ -382,7 +382,20 @@ module SymetrieCom
           def base_set_class#:nodoc:
             acts_as_nested_set_options[:class] # for single-table inheritance
           end
-               
+
+          def filtered_attributes(record, options = {})
+            attributes = record.attributes
+
+            if options[:except]
+              except = options[:except].map {|e| e.to_s}
+              return attributes.except(except)
+            elsif options[:only]
+              only = options[:only].map {|o| o.to_s }
+              return attributes.slice(only)
+            else
+              return attributes
+            end
+          end
         end
 
       end

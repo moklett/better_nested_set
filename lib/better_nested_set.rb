@@ -4,7 +4,7 @@ module SymetrieCom
     class Engine < Rails::Engine
     end
   else
-    ActiveSupport::Dependencies.load_paths << File.join(File.dirname(__FILE__), '..', 'app', "helpers")
+    ActiveSupport::Dependencies.autoload_paths << File.join(File.dirname(__FILE__), '..', 'app', "helpers")
   end
 
 end
